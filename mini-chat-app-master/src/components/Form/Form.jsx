@@ -2,6 +2,9 @@ import React, { Component } from "react";
 
 import { Button } from "reactstrap";
 import firebase from "firebase";
+import Cookies from 'js-cookie';
+import ScrollToBottom from 'react-scroll-to-bottom';
+import Linkify from 'react-linkify';
 
 // import {removeVietnameseAccentAndLowercase} from '../../utils/stringFunctions';
 // import {ToastContainer, toast} from 'react-toastify';
@@ -13,9 +16,10 @@ import Message from "../Message";
 export default class Form extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props);
+    let cookieUserInfo = JSON.parse(Cookies.get('userinfo'));
+
     this.state = {
-      userName: "Mock",
+      userName: cookieUserInfo.name,
       message: "",
       list: []
     };
@@ -23,7 +27,6 @@ export default class Form extends Component {
       .database()
       .ref()
       .child("messages");
-    console.log(this.messageRef);
     this.listenMessages();
   }
 
@@ -56,42 +59,38 @@ export default class Form extends Component {
 
   listenMessages() {
     this.messageRef.limitToLast(80).on("value", message => {
-      console.log("--listenMessages log");
-      console.log(message.val());
-
       let currentMessage = message ? Object.values(message.val()) : [];
 
       this.setState({
         list: currentMessage
       });
-      console.log('Listened Message');
-      console.log(this.state.list);
     });
   }
 
   render() {
-    console.log(this.state.list);
     return (
-      <div className="form">
-        <div className="form-message">
-          {this.state.list.map((message, index) => (
-            <Message key={index} message={message} />
-          ))}
+      <Linkify>
+        <div className="form">
+          <ScrollToBottom className="form-message">
+            {this.state.list.map((message, index) => (
+              <Message key={index} message={message} />
+            ))}
+          </ScrollToBottom>
+          <div className="form-row">
+            <input
+              className="form-input"
+              type="text"
+              placeholder="Type message"
+              value={this.state.message}
+              onChange={this.handleChange.bind(this)}
+              onKeyPress={this.handleKeyPress.bind(this)}
+            />
+            <button className="form-button" onClick={this.handleSend.bind(this)}>
+              <i className="fas fa-paper-plane" />
+            </button>
+          </div>
         </div>
-        <div className="form-row">
-          <input
-            className="form-input"
-            type="text"
-            placeholder="Type message"
-            value={this.state.message}
-            onChange={this.handleChange.bind(this)}
-            onKeyPress={this.handleKeyPress.bind(this)}
-          />
-          <button className="form-button" onClick={this.handleSend.bind(this)}>
-            <i className="fas fa-paper-plane" />
-          </button>
-        </div>
-      </div>
+      </Linkify>
     );
   }
 }

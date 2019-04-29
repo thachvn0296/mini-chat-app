@@ -80,11 +80,13 @@
       overflow: hidden;
     }
 
-    .email, .username {
+    .email,
+    .username {
       display: block;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      text-align: left;
     }
 
     .email {
