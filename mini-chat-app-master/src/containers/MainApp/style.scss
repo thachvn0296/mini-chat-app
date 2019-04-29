@@ -1,0 +1,51 @@
+.main-app {
+  .main-app--header {
+    .main-app--header-title {
+      font-weight: bold;
+      font-size: calc(10px + 6vh);
+    }
+
+    .main-app--header-formbox--signin {
+      .main-app--header-formbox--desc {
+        font-size: calc(10px + 1 vh);
+      }
+
+      .btn-signin {
+        font-size: 4.25rem;
+      }
+    }
+  }
+
+  .main-app--authenticated {
+    .main-app--header-formbox-userbox {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 250px;
+      height: 60px;
+      background: #2A2C30;
+      color: #EFF0F0;
+    }
+
+    .main-app--header-formbox-leftpanel {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 10px;
+      background: #36393F;
+      width: 250px;
+      height: calc(100% - 60px);
+      color: #EFF0F0;
+    }
+
+    .main-app--header-formbox-chatinput {
+      position: absolute;
+      left: 250px;
+      top: 0;
+      height: 100%;
+      width: calc(100% - 250px);
+      padding: 10px;
+      background: #EFF0F0;
+    }
+  }
+}
