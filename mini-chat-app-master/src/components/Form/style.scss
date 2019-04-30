@@ -20,10 +20,12 @@
     border: 1px solid #ddd;
     box-sizing: border-box;
     outline: 0;
-  }
+    resize: none;
+    max-height: 55px;
 
-  .form-input:focus {
-    background-color: rgba(245, 243, 243, 0.5);
+    &:focus {
+      background-color: rgba(245, 243, 243, 0.5);
+    }
   }
 
   .form-button {
@@ -34,10 +36,22 @@
     border-radius: 0 5px 5px 0;
     outline: 0;
     cursor: pointer;
+    height: 55px;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, .8);
+    }
   }
 
-  .form-button:hover {
-    background-color: rgba(0, 0, 0, .8);
+  .form-emoji-picker {
+    border-radius: 5px;
+    background: white;
+    color: gray;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, .8);
+      color: white;
+    }
   }
 
   .form-message {
@@ -45,6 +59,70 @@
     padding: 0 20px;
     height: calc(100% - 70px);
     max-height: calc(100% - 70px);
-    overflow-y: scroll;
+    overflow-y: hidden;
   }
+}
+
+.emoji-mart-category-list {
+  display: inline-flex;
+  list-style: none;
+}
+
+.emoji-mart-scroll {
+  max-height: 350px;
+  overflow-y: scroll;
+}
+
+.emoji-picker-wrapper {
+  position: absolute;
+  bottom: 80px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  border-radius: 10px;
+  left: 100px;
+}
+
+.emoji-mart-category-list {
+  display: inline-flex;
+  list-style: none;
+  flex-flow: row wrap;
+}
+
+.emoji-mart-bar {
+  padding: 10px;
+}
+
+.rta {
+  position: relative;
+  border-left: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  height: 55px !important;
+  width: 100%;
+  height: 43px;
+  flex-grow: 1;
+}
+
+.rta__autocomplete {
+  position: absolute;
+  width: 300px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.rta__autocomplete ul {
+  list-style: none;
+  text-align: left;
+  margin-bottom: 0;
+}
+
+.rta__autocomplete li {
+  margin-bottom: 5px;
+  padding: 3px 20px;
+  cursor: pointer;
+}
+
+.rta__autocomplete li:hover {
+  background-color: skyblue;
 }
