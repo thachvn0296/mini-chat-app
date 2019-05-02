@@ -14,8 +14,8 @@ export default class User extends Component {
       user:  JSON.parse(Cookies.get('userinfo'))
     };
 
-    console.log('USER LOG');
-    console.log(this.state.user);
+    // console.log('USER LOG');
+    // console.log(this.state.user);
   }
 
   componentWillMount = () => {}

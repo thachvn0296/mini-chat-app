@@ -6,9 +6,6 @@ import Cookies from 'js-cookie';
 import User from "../../components/User";
 import Form from "../../components/Form";
 
-// import {removeVietnameseAccentAndLowercase} from '../../utils/stringFunctions';
-// import {ToastContainer, toast} from 'react-toastify';
-
 import firebase from "firebase";
 import firebaseConfig from "../../config";
 
@@ -21,9 +18,48 @@ export default class MainApp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: Cookies.get('userinfo')
+      userinfo: Cookies.get('userinfo'),
+      list: []
     };
+    this.listenUsersRef = firebase.database().ref().child("users");
+    this.userRef = firebase.database().ref().child(`users/${this.state.userinfo.uid}`);
+    this.listenUsers();
   }
+
+  updateOnlineStatus() {
+    // console.log('Update User Online Status', this.state.userinfo.uid);
+    this.userRef = firebase.database().ref().child(`users/${this.state.userinfo.uid}`);
+    this.userRef.set({status: 'online', name: this.state.userinfo.name});
+
+    this.listenUsers();
+  }
+
+  listenUsers() {
+    console.log('User Listener');
+    let tmpList = [];
+    firebase.database().ref().child("users").limitToLast(80).on("value", user => {
+      console.log(user);
+      let arr = user.val();
+      console.log(arr);
+      let mapUserList = Object.keys(arr).forEach((key) => {
+        let userData = {
+          uid: key,
+          status: arr[key].status,
+          name: arr[key].name
+        };
+        arr[key] = {
+          uid: key,
+          status: arr[key].status,
+          name: arr[key].name
+        }
+      });
+      // console.log(arr);
+      this.setState({list: arr});
+
+      // console.log(this.state.list);
+    });
+  }
+
   componentWillMount() {
     if (!this.state.user) {
       this.handleLogOut();
@@ -34,7 +70,9 @@ export default class MainApp extends Component {
     firebase.auth().onAuthStateChanged(user => {
       this.setState({user});
     });
-    this.showCurrentUserProfile();
+    // this.showCurrentUserProfile();
+    this.listenUsers();
+    console.log(this.state.list);
   }
 
   handleGoogleSignIn() {
@@ -42,37 +80,43 @@ export default class MainApp extends Component {
     firebase.auth().signInWithPopup(provider).then(result => {
       if (result.credential) {
         // This gives you a Google Access Token. You can use it to access the Google API.
-        var token = result.credential.accessToken;
+        // var token = result.credential.accessToken;
         // ...
       }
       // The signed-in user info.
-      var user = result.user;
+      // var user = result.user;
       this.showCurrentUserProfile();
+
     }).catch(error => {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // The email of the user's account used.
-      var email = error.email;
-      // The firebase.auth.AuthCredential type that was used.
-      var credential = error.credential;
-      // ...
+      //  Handle Errors here.
+      // var errorCode = error.code;
+      // var errorMessage = error.message;
+      //  The email of the user's account used.
+      // var email = error.email;
+      //  The firebase.auth.AuthCredential type that was used.
+      // var credential = error.credential;
+      //  ...
     });
   }
 
   handleFacebookSignIn() {
     const provider = new firebase.auth.FacebookAuthProvider();
     firebase.auth().signInWithPopup(provider).then(result => {
-      // This gives you a Facebook Access Token.
-      var token = result.credential.accessToken;
-      // The signed-in user info.
-      var user = result.user;
+      //  This gives you a Facebook Access Token.
+      // var token = result.credential.accessToken;
+      //  The signed-in user info.
+      // var user = result.user;
       this.showCurrentUserProfile();
     }).catch(error => {});
   }
 
   handleLogOut() {
     firebase.auth().signOut();
+
+    if (this.state.user != null) {
+      this.userRef = firebase.database().ref().child(`users/${this.state.userinfo.uid}`);
+      this.userRef.set({status: 'offline', name: this.state.userinfo.name});
+    }
   }
 
   showCurrentUserProfile() {
@@ -94,10 +138,13 @@ export default class MainApp extends Component {
 
       this.setState({userinfo: userdata});
       Cookies.set('userinfo', userdata, {expires: 7});
+      this.updateOnlineStatus();
     }
   }
 
   render() {
+    const {list} = this.state;
+    console.log('List User Log ',list);
     return (<div className="main-app">
 
       {
@@ -108,9 +155,13 @@ export default class MainApp extends Component {
               <div className="main-app--header-formbox--desc">
                 <i>
                   Please sign in via
-                  <b> Google </b>
+                  <b>
+                    &nbsp;Google&nbsp;
+                  </b>
                   or
-                  <b> Facebook </b>
+                  <b>
+                    &nbsp;Facebook&nbsp;
+                  </b>
                   account
                 </i>
               </div>
@@ -132,7 +183,14 @@ export default class MainApp extends Component {
             </div>
 
             <div className="main-app--header-formbox-leftpanel">
-              List Users
+              {
+                Object.keys(list).map((uid, status, name) => {
+                  console.log(list[uid], status, name);
+                  return (<div>
+                    {list[uid].name} - {list[uid].status}
+                  </div>)
+                })
+              }
             </div>
           </div>)
       }
