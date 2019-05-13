@@ -22,7 +22,7 @@ export default class MainApp extends Component {
       list: []
     };
     this.listenUsersRef = firebase.database().ref().child("users");
-    this.userRef = firebase.database().ref().child(`users/${this.state.userinfo.uid}`);
+    // this.userRef = firebase.database().ref().child(`users/${this.state.userinfo.uid}`);
     this.listenUsers();
   }
 
@@ -186,8 +186,10 @@ export default class MainApp extends Component {
               {
                 Object.keys(list).map((uid, status, name) => {
                   console.log(list[uid], status, name);
-                  return (<div>
-                    {list[uid].name} - {list[uid].status}
+                  return (<div className="user-list">
+                    <div className={`user-item ${list[uid].status}`} >
+                      {list[uid].name} - {list[uid].status}
+                    </div>
                   </div>)
                 })
               }

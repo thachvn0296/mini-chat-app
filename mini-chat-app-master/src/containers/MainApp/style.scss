@@ -29,13 +29,32 @@
 
     .main-app--header-formbox-leftpanel {
       position: absolute;
-      top: 0;
+      top:0;
       left: 0;
       padding: 10px;
       background: #36393F;
       width: 250px;
       height: calc(100% - 60px);
       color: #EFF0F0;
+
+      .user-list {
+        .user-item {
+          font-size: 14px;
+          text-align: left;
+        }
+
+        .online {
+          color: #43b581;
+        }
+
+        .offline {
+          color: #747f8d;
+        }
+
+        .away {
+          color: yellow;
+        }
+      }
     }
 
     .main-app--header-formbox-chatinput {
