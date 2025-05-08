@@ -1,3 +1,4 @@
+// This firebase project is closed. Replace these with a new configuration to run the source code
 export default {
   apiKey: "AIzaSyDQL5pP6wecxiqm1HlV2K3kju9XJH3jXkg",
   authDomain: "mini-chat-app-236b6.firebaseapp.com",
